@@ -1,0 +1,303 @@
+:root {
+  --video-max-width: 800px;
+  --video-aspect-ratio: 56.25%;  /* 16:9 */
+  --subtitle-position-top: 75%;  /* Позиция субтитров относительно верха видео */
+}
+
+.App {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 1rem;
+  color: white;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.App-main {
+  display: flex;
+  flex: 1;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.App-sidebar {
+  flex: 0 0 300px;
+  padding-right: 1rem;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.App-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
+/* Video Uploader Styles */
+.video-uploader {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.select-file-button, .upload-button {
+  padding: 0.5rem 1rem;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.select-file-button:hover, .upload-button:hover {
+  background-color: #3367d6;
+}
+
+.select-file-button:disabled, .upload-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.selected-file {
+  margin-top: 0.5rem;
+}
+
+.selected-file p {
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+
+/* Video List Styles */
+.Videos-list-container {
+  text-align: left;
+}
+
+.videos-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.videos-list li {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.videos-list li:hover {
+  background-color: #f5f5f5;
+}
+
+/* Video Player Styles */
+.video-player-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.video-player-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  max-width: var(--video-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.fixed-video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: var(--video-aspect-ratio);
+  overflow: hidden;
+  background-color: #000;
+}
+
+.fixed-video-container > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay-subtitle {
+  position: absolute;
+  bottom: auto;
+  top: var(--subtitle-position-top); /* Используем переменную для положения субтитров */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  padding: 0 20px; /* Добавляем отступы по бокам */
+  max-height: 20%; /* Ограничиваем высоту, чтобы субтитры не занимали слишком много места */
+  overflow: hidden; /* Скрываем текст, который не помещается */
+  pointer-events: none; /* Чтобы клики проходили сквозь субтитры на элементы управления видео */
+}
+
+.subtitle-text-overlay {
+  background-color: rgba(0, 0, 0, 0.25); /* 75% прозрачности (25% непрозрачности) */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  max-width: 90%; /* Увеличиваем максимальную ширину для длинных субтитров */
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600; /* Делаем текст полужирным для лучшей видимости */
+  line-height: 1.4;
+  margin: 0 auto;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 1), -1px -1px 2px rgba(0, 0, 0, 1); /* Усиленная тень со всех сторон */
+  -webkit-text-stroke: 0.5px black; /* Добавляем обводку текста */
+}
+
+.subtitles-list {
+  flex: 1;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.subtitles-list h3 {
+  margin-top: 0;
+}
+
+.subtitles-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.subtitle-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subtitle-item:hover {
+  background-color: #f5f5f5;
+}
+
+.subtitle-item.active {
+  background-color: #e3f2fd;
+}
+
+.subtitle-time {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.subtitle-text {
+  margin: 0.25rem 0 0 0;
+}
+
+/* Status Messages */
+.Processing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.No-video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.Error-message {
+  color: #d32f2f;
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .App-main {
+    flex-direction: column;
+  }
+  
+  .App-sidebar {
+    flex: 0 0 auto;
+    padding-right: 0;
+    padding-bottom: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    max-width: 100%;
+  }
+  
+  .App-content {
+    padding-left: 0;
+    padding-top: 1rem;
+  }
+  
+  /* Уменьшаем размер шрифта и смещаем субтитры ниже на мобильных устройствах */
+  :root {
+    --subtitle-position-top: 78%;
+  }
+  
+  .subtitle-text-overlay {
+    font-size: 0.9rem;
+    max-width: 95%;
+    padding: 6px 12px;
+  }
+}
+
+/* Стили для полноэкранного режима */
+.fixed-video-container.fullscreen .overlay-subtitle {
+  top: 80%; /* В полноэкранном режиме смещаем субтитры ниже */
+}
+
+.fixed-video-container.fullscreen .subtitle-text-overlay {
+  font-size: 1.5rem; /* Увеличиваем размер шрифта в полноэкранном режиме */
+  max-width: 85%;
+  padding: 10px 20px;
+}
