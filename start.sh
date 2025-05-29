@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Запускаем Flask сервер в фоновом режиме
+# Flask сервер
 cd "$(dirname "$0")"
 source .venv/bin/activate
 
@@ -9,16 +9,14 @@ cd backend
 python app.py &
 BACKEND_PID=$!
 
-# Ждем, пока сервер запустится
-sleep 2
+sleep 10
 
-# Запускаем React-приложение
+# React
 echo "Запуск React-приложения..."
 cd ../frontend
 npm start &
 FRONTEND_PID=$!
 
-# Функция, которая выполняется при завершении скрипта
 cleanup() {
     echo "Завершение работы серверов..."
     kill $BACKEND_PID
@@ -26,9 +24,9 @@ cleanup() {
     exit 0
 }
 
-# Перехватываем сигналы завершения
+# Перехватывание сигналов завершения
 trap cleanup SIGINT SIGTERM
 
-# Ждем, пока пользователь не нажмет Ctrl+C
+# Ctrl+C - Завершение
 echo "Приложение запущено. Нажмите Ctrl+C для завершения."
 wait 

@@ -1,7 +1,7 @@
 :root {
   --video-max-width: 800px;
-  --video-aspect-ratio: 56.25%;  /* 16:9 */
-  --subtitle-position-top: 75%;  /* Позиция субтитров относительно верха видео */
+  --video-aspect-ratio: 56.25%;
+  --subtitle-position-top: 75%;
 }
 
 .App {
@@ -26,11 +26,29 @@
   background-color: #282c34;
   padding: 1rem;
   color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .App-header h1 {
   margin: 0;
   font-size: 1.8rem;
+}
+
+.translate-link {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  background-color: #4285f4;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.translate-link:hover {
+  background-color: #3367d6;
 }
 
 .App-main {
@@ -40,6 +58,8 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .App-sidebar {
@@ -56,7 +76,6 @@
   padding-left: 1rem;
 }
 
-/* Video Uploader Styles */
 .video-uploader {
   margin-bottom: 2rem;
   text-align: left;
@@ -119,11 +138,13 @@
   background-color: #f5f5f5;
 }
 
-/* Video Player Styles */
 .video-player-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .video-player-wrapper {
@@ -133,6 +154,7 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .fixed-video-container {
@@ -142,6 +164,43 @@
   padding-bottom: var(--video-aspect-ratio);
   overflow: hidden;
   background-color: #000;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.fixed-video-container.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  z-index: 9999;
+  border-radius: 0;
+  background-color: #000;
+}
+
+.fixed-video-container.fullscreen > div,
+.fixed-video-container.fullscreen video,
+.fixed-video-container.fullscreen iframe {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.fixed-video-container.fullscreen .overlay-subtitle {
+  top: 80%;
+  z-index: 9999;
+  position: fixed;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
 }
 
 .fixed-video-container > div {
@@ -155,85 +214,129 @@
 .overlay-subtitle {
   position: absolute;
   bottom: auto;
-  top: var(--subtitle-position-top); /* Используем переменную для положения субтитров */
+  top: var(--subtitle-position-top);
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
-  padding: 0 20px; /* Добавляем отступы по бокам */
-  max-height: 20%; /* Ограничиваем высоту, чтобы субтитры не занимали слишком много места */
-  overflow: hidden; /* Скрываем текст, который не помещается */
-  pointer-events: none; /* Чтобы клики проходили сквозь субтитры на элементы управления видео */
+  padding: 0 20px;
+  max-height: 20%;
+  overflow: hidden;
+  pointer-events: none;
+  transition: all 0.3s ease;
 }
 
 .subtitle-text-overlay {
-  background-color: rgba(0, 0, 0, 0.25); /* 75% прозрачности (25% непрозрачности) */
+  background-color: rgba(0, 0, 0, 0.25);
   color: white;
   padding: 8px 16px;
   border-radius: 4px;
-  max-width: 90%; /* Увеличиваем максимальную ширину для длинных субтитров */
+  max-width: 90%;
   text-align: center;
   font-size: 1.1rem;
-  font-weight: 600; /* Делаем текст полужирным для лучшей видимости */
+  font-weight: 600;
   line-height: 1.4;
   margin: 0 auto;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 1), -1px -1px 2px rgba(0, 0, 0, 1); /* Усиленная тень со всех сторон */
-  -webkit-text-stroke: 0.5px black; /* Добавляем обводку текста */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 1), -1px -1px 2px rgba(0, 0, 0, 1);
+  -webkit-text-stroke: 0.5px black;
+  animation: fadeIn 0.3s ease-in-out;
+  word-break: break-word;
+  white-space: pre-line;
+  overflow-wrap: break-word;
 }
 
 .subtitles-list {
   flex: 1;
   overflow-y: auto;
   text-align: left;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .subtitles-list h3 {
   margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.loading-subtitles, .no-subtitles {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.loading-subtitles {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.6; }
 }
 
 .subtitles-scroll {
   max-height: 300px;
   overflow-y: auto;
+  padding-right: 5px;
 }
 
 .subtitle-item {
-  padding: 0.5rem;
-  border-bottom: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: white;
   cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  border-left: 4px solid transparent;
 }
 
 .subtitle-item:hover {
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
 }
 
 .subtitle-item.active {
   background-color: #e3f2fd;
+  border-left: 4px solid #2196F3;
+  animation: pulse 1s infinite alternate;
 }
 
 .subtitle-time {
   font-size: 0.8rem;
   color: #666;
+  display: block;
+  margin-bottom: 4px;
 }
 
 .subtitle-text {
   margin: 0.25rem 0 0 0;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  word-break: break-word;
+  white-space: pre-line;
 }
 
-/* Status Messages */
 .Processing-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
-.No-video-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -248,7 +351,43 @@
   padding: 1rem;
   background-color: #ffebee;
   border-radius: 4px;
-  margin-top: 1rem;
+  margin: 1rem 0;
+  text-align: left;
+  border-left: 4px solid #d32f2f;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.No-video-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: #666;
+  border: 2px dashed #ddd;
+}
+
+.No-video-placeholder p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.No-video-placeholder svg {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+  color: #ccc;
 }
 
 @keyframes App-logo-spin {
@@ -279,7 +418,6 @@
     padding-top: 1rem;
   }
   
-  /* Уменьшаем размер шрифта и смещаем субтитры ниже на мобильных устройствах */
   :root {
     --subtitle-position-top: 78%;
   }
@@ -291,13 +429,61 @@
   }
 }
 
-/* Стили для полноэкранного режима */
-.fixed-video-container.fullscreen .overlay-subtitle {
-  top: 80%; /* В полноэкранном режиме смещаем субтитры ниже */
+video::-webkit-media-controls {
+  z-index: 2147483647;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  from { border-left-color: #2196F3; }
+  to { border-left-color: #64b5f6; }
 }
 
 .fixed-video-container.fullscreen .subtitle-text-overlay {
-  font-size: 1.5rem; /* Увеличиваем размер шрифта в полноэкранном режиме */
+  font-size: 1.5rem;
   max-width: 85%;
   padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+}
+
+:fullscreen .overlay-subtitle {
+  z-index: 9999;
+  position: fixed;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+:-webkit-full-screen .overlay-subtitle {
+  z-index: 9999;
+  position: fixed;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+:-moz-full-screen .overlay-subtitle {
+  z-index: 9999;
+  position: fixed;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+:-ms-fullscreen .overlay-subtitle {
+  z-index: 9999;
+  position: fixed;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
 }

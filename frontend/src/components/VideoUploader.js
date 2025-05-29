@@ -15,7 +15,6 @@ function VideoUploader({ onUpload, disabled }) {
     if (selectedFile) {
       onUpload(selectedFile);
       setSelectedFile(null);
-      // Сбрасываем значение input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
